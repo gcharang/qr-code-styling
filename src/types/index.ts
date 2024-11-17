@@ -1,3 +1,6 @@
+import { DOMWindow, JSDOM } from "jsdom";
+import nodeCanvas  from "canvas";
+
 export interface UnknownObject {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
@@ -11,33 +14,7 @@ export type GradientType = "radial" | "linear";
 export type DrawType = "canvas" | "svg";
 export type ShapeType = "square" | "circle";
 
-export interface Canvas extends HTMLCanvasElement {
-  toBuffer?: (type: string) => Buffer;
-  createCanvas?: (width: number, height: number) => Canvas;
-  loadImage?: (image: string) => Promise<HTMLImageElement>;
-}
-
-export interface Window {
-  Image: typeof HTMLImageElement;
-  XMLSerializer: typeof XMLSerializer;
-  document: Document;
-}
-declare const window: Window;
-
-interface JsDomOptions {
-  resources: string;
-}
-export class JSDom {
-  window: Window;
-  _options: JsDomOptions;
-  _input: string;
-
-  constructor(input: string, options: JsDomOptions) {
-    this._options = options;
-    this._input = input;
-    this.window = window;
-  }
-}
+export type Window = DOMWindow;
 
 export type Gradient = {
   type: GradientType;
@@ -139,8 +116,8 @@ export type Options = {
   margin?: number;
   data?: string;
   image?: string;
-  nodeCanvas?: Canvas;
-  jsdom?: typeof JSDom;
+  nodeCanvas?: typeof nodeCanvas;
+  jsdom?: typeof JSDOM;
   qrOptions?: {
     typeNumber?: TypeNumber;
     mode?: Mode;
@@ -157,6 +134,7 @@ export type Options = {
     type?: DotType;
     color?: string;
     gradient?: Gradient;
+    roundSize?: boolean;
   };
   cornersSquareOptions?: {
     type?: CornerSquareType;
